@@ -44,8 +44,47 @@ $ra <- PC + 4
 jr $ra
 
 
+# codigo exemplo verificacao impar/par usando Funcoes
 
+.data
+	msg_input: .asciiz "insert a number: "
+	msg_even: .asciiz "par\n"
+	msg_odd: .asciiz "impar\n"
+	
+.text
+	.main:
+		la $s1, msg_input
+		
+		jal print_str
+		jal read_int # le um inteiro e armazena em $v0
+		jal even_or_odd 	# se par $s0 = 0 se nao $s0 = 1
+		
+		beq $v0, $zero, par
+		
+		la $s1, msg_odd
+		j print
+		
+		par: la $s1, msg_even
 
+		print: jal print_str
+		
+		j exit	
+		
+	read_int: li $v0, 5
+		syscall
+		jr $ra
+		
+	even_or_odd:
+		li $t0, 2
+		div $v0, $t0
+		mfhi $v0
+		jr $ra 
+		
+	print_str:
+		li $v0, 4
+		move $a0, $s1
+		syscall
+		jr $ra
 
-
+	exit:
 
